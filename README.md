@@ -4,9 +4,17 @@
 
 **One command. Structured prompt + file bundle. Ready to upload to ChatGPT Pro.**
 
-[![Claude Code Skill](https://img.shields.io/badge/Claude_Code-Skill-blueviolet?style=for-the-badge&logo=anthropic)](https://code.claude.com/docs/en/skills)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=for-the-badge)](https://github.com/199-biotechnologies/claude-skill-gpt-pro/pulls)
+<br />
+
+[![Star this repo](https://img.shields.io/github/stars/199-biotechnologies/claude-skill-gpt-pro?style=for-the-badge&logo=github&label=%E2%AD%90%20Star%20this%20repo&color=yellow)](https://github.com/199-biotechnologies/claude-skill-gpt-pro/stargazers)
+&nbsp;&nbsp;
+[![Follow @longevityboris](https://img.shields.io/badge/Follow_%40longevityboris-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/longevityboris)
+
+<br />
+
+[![Claude Code Skill](https://img.shields.io/badge/Claude_Code-Skill-blueviolet?style=flat-square&logo=anthropic)](https://code.claude.com/docs/en/skills)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=flat-square)](https://github.com/199-biotechnologies/claude-skill-gpt-pro/pulls)
 
 ---
 
@@ -219,18 +227,6 @@ Found a better prompt pattern? Have a domain-specific template that works well? 
 
 ---
 
-## Star This Repo
-
-If this skill saves you time, consider giving it a star. It helps others discover it and motivates continued development.
-
-<div align="center">
-
-**[Give it a star on GitHub](https://github.com/199-biotechnologies/claude-skill-gpt-pro)**
-
-</div>
-
----
-
 ## License
 
 MIT -- use it, fork it, adapt it.
@@ -242,5 +238,13 @@ MIT -- use it, fork it, adapt it.
 Built by [Boris Djordjevic](https://github.com/longevityboris) at [199 Biotechnologies](https://github.com/199-biotechnologies)
 
 A Claude Code skill for cross-model collaboration.
+
+<br />
+
+**If this skill saves you time:**
+
+[![Star this repo](https://img.shields.io/github/stars/199-biotechnologies/claude-skill-gpt-pro?style=for-the-badge&logo=github&label=%E2%AD%90%20Star%20this%20repo&color=yellow)](https://github.com/199-biotechnologies/claude-skill-gpt-pro/stargazers)
+&nbsp;&nbsp;
+[![Follow @longevityboris](https://img.shields.io/badge/Follow_%40longevityboris-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/longevityboris)
 
 </div>
