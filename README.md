@@ -1,8 +1,8 @@
 <div align="center">
 
-# GPT Pro Skill for Claude Code
+# Claude Skill: GPT Pro Review
 
-**One command. Structured prompt + file bundle. Ready to upload to ChatGPT Pro.**
+**Get a second opinion from ChatGPT Pro -- one command packages everything.**
 
 <br />
 
@@ -12,7 +12,9 @@
 
 <br />
 
-[![Claude Code Skill](https://img.shields.io/badge/Claude_Code-Skill-blueviolet?style=for-the-badge&logo=anthropic)](https://code.claude.com/docs/en/skills)
+[![Claude Code Skill](https://img.shields.io/badge/Claude_Code-Skill-blueviolet?style=for-the-badge&logo=anthropic)](https://docs.anthropic.com/en/docs/claude-code/skills)
+&nbsp;
+[![ChatGPT Pro](https://img.shields.io/badge/ChatGPT-Pro-10a37f?style=for-the-badge&logo=openai&logoColor=white)](https://chat.openai.com)
 &nbsp;
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 &nbsp;
@@ -20,9 +22,9 @@
 
 ---
 
-Stop copy-pasting code into ChatGPT. This skill teaches Claude Code to **package any problem** into a structured tar.gz with an engineered prompt, then **copies it to your clipboard** -- ready to paste and upload in seconds.
+You work in Claude Code. Sometimes you want a second set of eyes from a different model. This skill packages your problem -- files, context, and an engineered prompt -- into a tar.gz bundle ready to upload to ChatGPT Pro. One command. No copy-pasting. No lost context.
 
-[Install](#install) | [How It Works](#how-it-works) | [Use Cases](#use-cases) | [Template](#prompt-template) | [Contributing](#contributing)
+[Why This Exists](#why-this-exists) | [Install](#install) | [How It Works](#how-it-works) | [Use Cases](#use-cases) | [Contributing](#contributing)
 
 </div>
 
@@ -30,9 +32,11 @@ Stop copy-pasting code into ChatGPT. This skill teaches Claude Code to **package
 
 ## Why This Exists
 
-ChatGPT Pro excels at deep, long-context reasoning -- but **quality in = quality out**. A structured `PROMPT.md` that frames the problem, assigns an expert role, defines the output format, and points to the right files produces **10x better results** than dumping raw code into the chat.
+Every model has blind spots. Claude might miss something GPT catches, and vice versa. Cross-model review is the cheapest way to find bugs, validate architecture decisions, and catch reasoning errors before they ship.
 
-This skill encodes the prompt engineering patterns that consistently work.
+But getting a good answer from ChatGPT Pro requires a good prompt. Raw code dumps produce vague responses. Structured prompts with expert roles, specific questions, and evidence pointers produce actionable findings.
+
+This skill encodes the prompt engineering patterns that consistently work. You tell Claude what you want reviewed. It packages the right files, writes a structured prompt, strips secrets, and puts everything in your clipboard. You paste, upload, send.
 
 ### Before vs After
 
@@ -48,25 +52,22 @@ This skill encodes the prompt engineering patterns that consistently work.
 
 ## Install
 
-**One command:**
-
 ```bash
-# Clone into your Claude Code skills directory
 git clone https://github.com/199-biotechnologies/claude-skill-gpt-pro.git \
   ~/.claude/skills/gpt-pro
 ```
 
-That's it. Claude Code auto-discovers skills in `~/.claude/skills/`.
+Claude Code auto-discovers skills in `~/.claude/skills/`. No config needed.
 
-### Verify it works
+### Verify
 
-In Claude Code, just say:
+In Claude Code, say:
 
 ```
 Send this to GPT Pro for review
 ```
 
-Claude will activate the skill and walk you through scoping, collecting files, and packaging.
+Claude activates the skill and walks you through scoping, collecting files, and packaging.
 
 ---
 
@@ -94,7 +95,7 @@ You: "Send this to GPT Pro"
                                     ~/Documents/
                                     GPT Pro Analysis/
                                     project-review-2026-03-30/
-                                    +-- PROMPT.md     (also in clipboard)
+                                    +-- PROMPT.md     (copied to clipboard)
                                     +-- project.tar.gz
 ```
 
@@ -105,21 +106,7 @@ You: "Send this to GPT Pro"
 3. Upload the `.tar.gz`
 4. Send
 
----
-
-## Use Cases
-
-This skill is **domain-agnostic**. It works for anything that benefits from deep reasoning over multiple files:
-
-| Domain | Example |
-|--------|---------|
-| **Code debugging** | "Why does this crash under load?" with relevant source + error logs |
-| **Architecture review** | System design files + trade-off questions |
-| **Data analysis** | Datasets + schemas + analysis goals |
-| **Writing feedback** | Chapters + review criteria (structure, pacing, clarity) |
-| **Reverse engineering** | Decompiled code + reference implementations |
-| **Security audit** | Source code + threat model + compliance requirements |
-| **Research synthesis** | Papers + comparison matrix + synthesis goals |
+That's the entire workflow. Claude does the hard part (structuring the prompt, choosing the right files, sanitizing secrets). You do the easy part (paste and upload).
 
 ---
 
@@ -135,13 +122,13 @@ your-project-review-2026-03-30/
 +-- data/               # Supporting evidence -- logs, outputs, examples
 |   +-- error_log.txt
 |   +-- sample_output.json
-+-- reference/          # Optional -- comparison material, prior analysis
++-- reference/          # Comparison material, prior analysis
 |   +-- prior_findings.md
-+-- config/             # Optional -- sanitized config
++-- config/             # Sanitized config
     +-- env_sanitized.txt
 ```
 
-Subdirectories adapt to the domain. A book review might use `chapters/` and `feedback/`. Data analysis might use `datasets/` and `schemas/`.
+Subdirectories adapt to the domain. A writing review might use `chapters/` and `feedback/`. Data analysis might use `datasets/` and `schemas/`.
 
 ---
 
@@ -163,9 +150,6 @@ You are a senior <domain expert> conducting <type of analysis>.
 ## Context
 <2-4 paragraphs: what the system does, how it works, current state>
 
-## Current Situation
-<Quantified state: metrics, error rates, performance numbers>
-
 ## Questions
 ### Q1: <Specific, answerable question>
 **Data:** <Point to specific files>
@@ -181,13 +165,30 @@ You are a senior <domain expert> conducting <type of analysis>.
 4. **Impact** -- what changes if fixed?
 ```
 
-The template adapts per domain. The pattern is always: **Role + Context + Questions + Evidence Pointers + Output Format**.
+The template adapts per domain. The constant pattern is: **Role + Context + Questions + Evidence Pointers + Output Format**.
+
+---
+
+## Use Cases
+
+This skill is domain-agnostic. It works for anything that benefits from deep reasoning over multiple files.
+
+| Domain | Example |
+|--------|---------|
+| **Code review** | "Why does this crash under load?" with relevant source + error logs |
+| **Architecture review** | System design files + trade-off questions |
+| **Security audit** | Source code + threat model + compliance requirements |
+| **Data analysis** | Datasets + schemas + analysis goals |
+| **Writing feedback** | Chapters + review criteria (structure, pacing, clarity) |
+| **Research synthesis** | Papers + comparison matrix + synthesis goals |
+| **Reverse engineering** | Decompiled code + reference implementations |
+| **AI prompt review** | Prompt files + expected vs actual outputs |
 
 ---
 
 ## Security
 
-This skill auto-sanitizes before packaging. It strips:
+The skill auto-sanitizes before packaging. It strips:
 
 - Private keys, mnemonics, seed phrases
 - API keys, auth tokens, session cookies
@@ -204,10 +205,10 @@ A grep check runs before every package to catch anything missed.
 When GPT Pro returns results and you need a follow-up:
 
 1. Save Round 1 outputs with clear attribution
-2. Reference prior findings in the new `PROMPT.md`
-3. Include Round 1 outputs in the new package under `reference/`
+2. The skill references prior findings in the new `PROMPT.md`
+3. Round 1 outputs go into the new package under `reference/`
 
-The skill handles this automatically when you say "follow up on the last GPT Pro analysis."
+Tell Claude "follow up on the last GPT Pro analysis" and it handles this automatically.
 
 ---
 
@@ -221,17 +222,13 @@ Say any of these in Claude Code to activate:
 
 ## Contributing
 
-Found a better prompt pattern? Have a domain-specific template that works well? PRs are welcome.
-
-1. Fork the repo
-2. Edit `SKILL.md` or add templates
-3. Open a PR with before/after examples
+Found a better prompt pattern? Have a domain-specific template? PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
 ## License
 
-MIT -- use it, fork it, adapt it.
+[MIT](LICENSE) -- use it, fork it, adapt it.
 
 ---
 
@@ -241,7 +238,7 @@ Built by [Boris Djordjevic](https://github.com/longevityboris) at [199 Biotechno
 
 <br />
 
-**If this skill saves you time:**
+**If this is useful to you:**
 
 [![Star this repo](https://img.shields.io/github/stars/199-biotechnologies/claude-skill-gpt-pro?style=for-the-badge&logo=github&label=%E2%AD%90%20Star%20this%20repo&color=yellow)](https://github.com/199-biotechnologies/claude-skill-gpt-pro/stargazers)
 &nbsp;&nbsp;
