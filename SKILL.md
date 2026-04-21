@@ -1,27 +1,23 @@
 ---
 name: gpt-pro
-description: "Package files + structured prompts into tar.gz for deep reasoning review by ChatGPT Pro (browser upload). Use when user says 'send to GPT Pro', 'GPT Pro review', 'ChatGPT Pro review', 'prepare for GPT', 'package for GPT Pro', 'get GPT to review', 'GPT Pro analysis', 'upload to ChatGPT', 'gpt-pro', '/gpt-pro', 'pack for GPT', 'bundle for ChatGPT', 'have ChatGPT check this', 'send this to GPT', 'GPT deep review', 'browser pack', 'browser-pack'. Creates tar.gz + PROMPT.md in ~/Documents/GPT Pro Analysis/ subfolder, auto-copies prompt to clipboard, for manual upload to chat.openai.com."
+description: "Package files + structured prompts for manual copy-paste into GPT-5.4 Pro for deep reasoning review. Use when user says 'send to GPT Pro', 'GPT Pro review', 'ChatGPT Pro review', 'prepare for GPT', 'package for GPT Pro', 'get GPT to review', 'GPT Pro analysis', 'upload to ChatGPT', 'gpt-pro', '/gpt-pro', 'pack for GPT', 'bundle for ChatGPT', 'have ChatGPT check this', 'send this to GPT', 'GPT deep review'. Creates structured prompt + file bundle as tar.gz in ~/Documents/GPT Pro Analysis/ and copies prompt to clipboard for manual paste into ChatGPT Pro."
 ---
 
-# GPT Pro Analysis — Package Anything for ChatGPT Pro Deep Reasoning
+# GPT Pro Analysis — Deep Reasoning via GPT-5.4 Pro (Manual)
 
-Prepare any problem + relevant files into a structured tar.gz bundle that's ready to upload to ChatGPT Pro (browser). Domain-agnostic — works for code debugging, architecture review, data analysis, writing feedback, reverse engineering, research synthesis, or anything that benefits from deep reasoning over multiple files.
+Prepare any problem + relevant files into a structured package for manual upload to ChatGPT Pro. Domain-agnostic — works for code debugging, architecture review, data analysis, writing feedback, reverse engineering, research synthesis, or anything that benefits from deep reasoning over multiple files.
 
-## Why Structured Packages Beat Copy-Paste
-
-ChatGPT Pro accepts file uploads and excels at deep, long-context reasoning — but quality in = quality out. A tar.gz with a structured PROMPT.md that frames the problem, sets the role, defines the output format, and points to the right files consistently produces 10x better results than dumping raw code into the chat. This skill encodes the prompt patterns that work.
-
-## Core Workflow
+## Workflow
 
 ```
-1. UNDERSTAND  → What does the user want GPT Pro to analyze? What's the question?
-2. SCOPE       → Which files are relevant? What context does GPT Pro need?
-3. COLLECT     → Copy relevant files into a staging directory
-4. PROMPT      → Generate PROMPT.md with role, context, questions, output format
-5. SANITIZE    → Strip secrets, credentials, internal URLs
-6. PACKAGE     → tar.gz to ~/Desktop with descriptive dated name
-7. REPORT      → Tell user: package location, contents, upload instructions
+UNDERSTAND → SCOPE → COLLECT → PROMPT → SANITIZE → PACKAGE → REPORT
 ```
+
+Everything runs locally. The final step is a tar.gz on disk + prompt on clipboard, ready for you to paste into chatgpt.com.
+
+## Why a Structured Package Beats a Chat Dump
+
+ChatGPT Pro excels at deep, long-context reasoning — but quality in = quality out. A structured PROMPT.md that frames the problem, sets the role, defines the output format, and indexes the attached files consistently produces 10x better results than pasting raw code into the chat. This skill encodes the prompt patterns that work.
 
 ## Step 1: Understand the Task
 
@@ -30,48 +26,78 @@ Ask or infer from conversation context:
 - **What expertise should GPT Pro adopt?** — Match to the domain (senior engineer, editor, data scientist, etc.)
 - **What output format?** — Code fixes with file:line? A report? A redesigned component? A comparison matrix?
 
-## Step 2: Scope the Files
+## Step 2: Collect the Files (Be Generous)
 
-Include ONLY what GPT Pro needs. Less is more — irrelevant files dilute attention.
+**Philosophy: more is more.** GPT-5.4 Pro has a huge context window and is excellent at triaging — it will decide which files to read deeply and which to skim or ignore. Don't pre-filter aggressively; you'll strip out the one file that turns out to hold the clue. When in doubt, include it. Missing context is a bigger failure mode than "too much context".
 
 **Always include:**
-- Files directly related to the problem
-- Config/env that affects behavior (sanitized)
+- The file(s) directly implicated in the problem
+- Adjacent / dependent code (callers, callees, shared utilities, types)
+- Config / env that affects behavior (sanitized)
 - Sample data showing the issue (logs, errors, outputs, examples)
+- A **file tree** of the repo (`tree -L 4 -I 'node_modules|target|.git|__pycache__' > tree.txt`) so GPT Pro sees the full universe even for files not attached
+- A **recent git log** (`git log --oneline -n 50 > git-log.txt`) — recent commits often explain what broke
+- Any `README.md`, `CLAUDE.md`, or architecture docs in the repo
 
-**Include when helpful:**
-- Reference/comparison material (competitor code, prior version, working example)
-- Prior findings or decision logs (so GPT doesn't re-investigate solved problems)
+**Include generously when even tangentially related:**
+- Tests (they document expected behavior)
+- Related modules in the same feature area
+- Prior version of the file (via `git show HEAD~5:path/to/file > prior-version.txt`)
+- Reference / comparison material — competitor code, working example, spec documents
+- Prior analysis / decision logs / ADRs
+- Package manifests (`package.json`, `Cargo.toml`, `pyproject.toml`) so versions are unambiguous
 
-**Never include:**
-- `node_modules/`, `target/`, `__pycache__/`, build artifacts
-- Files >5000 lines (excerpt the relevant sections instead)
-- Unrelated modules or services
+**Only exclude:**
+- Secrets (see Step 5 — mandatory sanitization)
+- Build artifacts: `node_modules/`, `target/`, `dist/`, `build/`, `__pycache__/`, `.next/`
+- Binary blobs (images, fonts, compiled libs) unless directly relevant
+- Machine-generated lockfiles >10MB (ok to include smaller ones)
+- Vendored third-party code unless it's the subject of the review
 
 ## Step 3: Build the Package Directory
 
 ```
 <descriptive-name>/
 ├── PROMPT.md           # THE key file — structured task + questions
+├── tree.txt            # Full repo tree (tree -L 4 -I '...' > tree.txt)
+├── git-log.txt         # Recent commits (git log --oneline -n 50)
 ├── source/             # Relevant source files (preserve original names)
 │   ├── module_a.py
 │   ├── module_b.rs
 │   └── Component.tsx
+├── adjacent/           # Callers, callees, shared utils, types
+│   └── ...
+├── tests/              # Related tests — document expected behavior
+│   └── ...
 ├── data/               # Supporting evidence — logs, outputs, examples
 │   ├── error_log.txt
 │   ├── sample_output.json
 │   └── expected_vs_actual.md
-├── reference/          # Optional — comparison material, prior analysis
+├── docs/               # README, architecture notes, ADRs, CLAUDE.md
+│   └── ...
+├── reference/          # Comparison material, prior analysis, competitor code
 │   └── prior_findings.md
-└── config/             # Optional — sanitized config
-    └── env_sanitized.txt
+└── config/             # Sanitized config, package manifests
+    ├── env_sanitized.txt
+    ├── package.json
+    └── Cargo.toml
 ```
 
-Adapt the subdirectory names to the domain. For a book review it might be `chapters/` and `feedback/`. For data analysis it might be `datasets/` and `schemas/`. Use whatever makes sense.
+Adapt the subdirectory names to the domain. For a book review it might be `chapters/`, `research/`, and `feedback/`. For data analysis it might be `datasets/`, `schemas/`, and `notebooks/`. Use whatever makes sense — and lean toward more folders / more files rather than fewer.
 
 ## Step 4: Write PROMPT.md
 
-This is the most important file. It's what gets pasted into ChatGPT Pro first, before uploading the tar.gz. Structure it with these sections:
+This is the most important file. GPT-5.4 Pro starts with **ZERO project knowledge** — it cannot infer your stack, build tooling, conventions, or file layout without you telling it. Even though you're attaching many files, the PROMPT.md is what tells GPT Pro *why those files are there*, *what to look at first*, and *what you actually want back*. Without a strong PROMPT.md, a big bundle becomes noise.
+
+### The "Exhaustive Prompt" Pattern
+
+Short, vague prompts on large bundles yield generic answers. Lean into depth — a strong prompt is typically 500-2000 words and follows this structure:
+
+1. **Top:** Project briefing — stack, build/test commands, platform constraints, key directories
+2. **Middle:** Exact question + what you already tried + verbatim errors
+3. **Bottom:** Constraints + desired output format + file index
+
+The more files you attach, the more the PROMPT.md needs to act as a *map*: point GPT Pro at the 2-3 files where the investigation should start, while making clear the rest are available as context to pull on.
 
 ### PROMPT.md Template
 
@@ -87,13 +113,28 @@ You are a senior <domain expert> conducting <type of analysis>. You have deep ex
 2. Don't tell me what's working. Tell me what's wrong/missing/improvable and how to fix it.
 3. For each finding: root cause, evidence (file:line or specific quote), fix, expected impact.
 
+## Project Briefing
+
+<Stack, frameworks, language versions, platform targets. GPT Pro can't guess this.>
+- **Stack:** <e.g., Next.js 15, TypeScript 5.8, Supabase, Vercel>
+- **Build:** <e.g., `pnpm build`, `cargo test`, `npm run dev`>
+- **Platform:** <e.g., macOS/iOS, Linux server, browser SPA>
+- **Key directories:** <e.g., `src/` = app code, `lib/` = shared utils, `supabase/` = migrations>
+
 ## Context
 
-<2-4 paragraphs explaining the system/project/document — what it does, how it works, what the current state is. Include enough for GPT Pro to understand the architecture without needing to infer it from code alone.>
+<2-4 paragraphs explaining the system/project — what it does, how it works, current state. Include enough for GPT Pro to understand the architecture without needing to infer it from code alone.>
 
 ## Current Situation
 
 <Quantified state — metrics, error rates, performance numbers, word counts, whatever is measurable. Concrete data, not vibes.>
+
+## What We Already Tried
+
+<Critical section. List what was attempted and why it didn't work. Prevents GPT Pro from suggesting things you already ruled out.>
+
+1. <Approach 1> — <why it failed or was insufficient>
+2. <Approach 2> — <result>
 
 ## Questions
 
@@ -106,21 +147,60 @@ You are a senior <domain expert> conducting <type of analysis>. You have deep ex
 
 ### Q3-N: <As many as needed, usually 3-7>
 
+## Where to Start
+
+<The bundle is large. Tell GPT Pro where to begin so it doesn't burn thinking budget on irrelevant files.>
+
+**Start with:** `source/<primary-file>` and `data/<key-evidence>`. These are where the problem manifests.
+**Then check:** `adjacent/<caller>` and `tests/<failing-test>` to verify the control flow.
+**Everything else** (docs, reference, tree, git-log) is context — pull on it when the primary files raise questions.
+
 ## Files Included
 
-<List each file with a one-line description of what it contains and why it's relevant.>
+<The bundle may contain dozens of files — this table is the navigation index. List every file with a one-line description of what it is and why it's attached. Group by folder.>
 
-## Output Format
+**Core (primary investigation)**
+| File | Role |
+|---|---|
+| `source/auth.ts` | OAuth2 implementation — the code under review |
+| `source/middleware.ts` | Request pipeline — calls auth.ts |
+| `data/error_log.txt` | Production errors from last 24h |
 
-For each question:
-1. **Finding** — what specifically is the issue?
-2. **Evidence** — cite file:line, specific data, or quote
-3. **Fix/Recommendation** — concrete, actionable
-4. **Impact** — what changes if this is fixed?
+**Adjacent (likely relevant)**
+| File | Role |
+|---|---|
+| `adjacent/session.ts` | Session store — auth.ts writes to it |
+| `adjacent/types.ts` | Shared type defs |
+| `tests/auth.test.ts` | Existing tests — the failing one is `describe('refresh')` |
+
+**Context (pull on if needed)**
+| File | Role |
+|---|---|
+| `tree.txt` | Full repo layout |
+| `git-log.txt` | Last 50 commits — the regression likely entered in the last 10 |
+| `docs/ARCHITECTURE.md` | How the auth subsystem fits the whole app |
+| `config/package.json` | Dep versions (jsonwebtoken 9.0.2, next-auth 5.0.0-beta) |
+| `reference/prior-auth-review.md` | Last GPT Pro review from 2 months ago |
+
+## Desired Output
+
+<Be specific about what form you want the answer in. This dramatically improves quality.>
+
+Options:
+- "Return a patch plan with exact file:line changes + test cases"
+- "List the 3 riskiest assumptions and how to validate each"
+- "Give 3 architectural options with tradeoffs table"
+- "Root cause analysis with evidence chain"
+- "Code review with severity-ranked findings"
 
 ## Constraints
 
-<Budget, timeline, technology stack limitations, things that can't change, scope boundaries.>
+<What can't change. What's locked in. Scope boundaries.>
+
+- Don't suggest replacing <framework/library> — it's locked in
+- Must maintain backward compatibility with <API/interface>
+- Performance budget: <specific numbers>
+- <Other hard constraints>
 ```
 
 ### Adapting the Template
@@ -138,7 +218,7 @@ The pattern is always: **Role + Context + Specific Questions + Evidence Pointers
 
 ## Step 5: Sanitize
 
-Before packaging, strip ALL secrets. This is non-negotiable — the package is going to a third-party service.
+Before packaging, strip ALL secrets. This is non-negotiable.
 
 ```bash
 # Create sanitized env copy
@@ -157,7 +237,7 @@ grep -v -E '(PRIVATE_KEY|MNEMONIC|API_KEY|PASSWORD|SECRET|AUTH_TOKEN|CREDENTIAL|
 grep -rni "password\|secret\|api_key\|private_key\|mnemonic\|token.*=" <pack-dir>/ | head -20
 ```
 
-## Step 6: Package
+## Step 6: Package for Manual Upload
 
 All packages go under `~/Documents/GPT Pro Analysis/`, with each run in its own subfolder:
 
@@ -169,40 +249,28 @@ cp /tmp/<pack-dir>/PROMPT.md "$OUTDIR/PROMPT.md"
 tar czf "$OUTDIR/<project>-<type>-$(date +%Y-%m-%d).tar.gz" -C /tmp <pack-dir>/
 ```
 
-Then copy the prompt to the clipboard so the user can paste it straight into ChatGPT Pro:
+Then copy the prompt to clipboard for immediate paste:
 
 ```bash
 cat "$OUTDIR/PROMPT.md" | pbcopy
 ```
 
-Example structure:
-```
-~/Documents/GPT Pro Analysis/
-├── myapp-debug-2026-03-21/
-│   ├── PROMPT.md
-│   └── myapp-debug-2026-03-21.tar.gz
-├── novel-structure-review-2026-03-28/
-│   ├── PROMPT.md
-│   └── novel-structure-review-2026-03-28.tar.gz
-└── ...
-```
-
 ## Step 7: Report to User
 
-Always end with:
-
-1. **Package location** — the path under `~/Documents/GPT Pro Analysis/` containing both `PROMPT.md` and the `.tar.gz`
+1. **Package location** — the path under `~/Documents/GPT Pro Analysis/`
 2. **What's inside** — file count, key files listed
-3. **Clipboard** — confirm the prompt has been copied to clipboard
+3. **Clipboard** — confirm the prompt has been copied
 4. **How to use it:**
-   - Open ChatGPT Pro in browser
+   - Open ChatGPT Pro in browser (chatgpt.com)
+   - Start a new chat, select GPT-5.4 Pro model
    - Paste (Cmd+V) — the prompt is already in your clipboard
-   - Upload the `.tar.gz` from the Desktop subfolder
+   - Attach the `.tar.gz` (or individual files from the pack directory if preferred)
    - Send
+   - Wait — deep thinking runs can take 10 min to 1 hour. Don't click "Answer now"; it skips deep thinking.
 
 ## PASTE_THIS.txt Alternative
 
-For smaller packages where upload is overkill, create a single `PASTE_THIS.txt` that concatenates everything:
+For smaller packages where file upload is overkill, create a single `PASTE_THIS.txt` that concatenates everything:
 
 ```
 # <TITLE>
@@ -223,13 +291,19 @@ FILE: <next filename>
 <file contents>
 ```
 
-This works well when the total content is under ~50K characters.
+This works well when the total content is under ~50K characters. Copy the whole thing to clipboard:
+
+```bash
+cat "$OUTDIR/PASTE_THIS.txt" | pbcopy
+```
+
+Then paste directly into ChatGPT — no file upload needed.
 
 ## Multi-Round Workflow
 
 When GPT Pro returns results and you need a follow-up:
 
-1. Save outputs in the project with clear attribution:
+1. Save the GPT Pro response locally with clear attribution:
    - `<dir>/gpt-pro-analysis-<date>.md` with header: "Source: GPT-5.4 Pro, <date>"
 2. For Round 2+, reference prior findings in the new PROMPT.md:
    ```markdown
@@ -240,3 +314,4 @@ When GPT Pro returns results and you need a follow-up:
    <Specific gaps, validations needed, deeper dives>
    ```
 3. Include Round 1 outputs in the new package under `reference/`
+4. In ChatGPT, you can either continue the same thread (paste the new prompt as a follow-up message) or start fresh with the Round 2 package — starting fresh is usually cleaner when the follow-up is substantial.

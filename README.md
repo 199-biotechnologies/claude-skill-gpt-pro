@@ -216,7 +216,7 @@ Tell Claude "follow up on the last GPT Pro analysis" and it handles this automat
 
 Say any of these in Claude Code to activate:
 
-> "Send to GPT Pro" | "GPT Pro review" | "ChatGPT Pro review" | "Package for GPT" | "Have ChatGPT check this" | "GPT deep review" | "Browser pack" | `/gpt-pro`
+> "Send to GPT Pro" | "GPT Pro review" | "ChatGPT Pro review" | "Package for GPT" | "Have ChatGPT check this" | "GPT deep review" | `/gpt-pro`
 
 ---
 
